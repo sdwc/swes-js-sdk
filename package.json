@@ -1,0 +1,27 @@
+{
+  "name": "swes-js-sdk",
+  "version": "1.0.0",
+  "description": "JS utilities library",
+  "main": "dist/swes-js-sdk.cjs.js",
+  "module": "dist/swes-js-sdk.esm.js",
+  "browser": "dist/agm-awesome-utils.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "node test/spec",
+    "pretest": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "jest": "^26.6.3",
+    "rollup": "^2.36.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}
