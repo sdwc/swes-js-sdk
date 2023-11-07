@@ -3,12 +3,12 @@ const axios = require('axios');
 
 const urlEventTrack = 'https://events.sdwc.me';
 const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
-let ipAddress = getRealIp();
+let ipAddress = null;
 
 export default class TrackService {
 
     constructor() {
-        
+        ipAddress = this.getRealIp();
     }
 
     sendPageHitTrack(token) {
@@ -17,7 +17,7 @@ export default class TrackService {
             event: 'page-hit',
             token: token,
             time: this.getCurTime(),
-            ip: this.ipAddress,
+            ip: ipAddress,
             insert_id: uuidv1()
         });
     
