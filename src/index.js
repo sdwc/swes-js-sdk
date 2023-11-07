@@ -2,24 +2,17 @@ let pageToken;
 let trackPageview = false;
 let trackFirstEventInterval = false;
 let initTime = false;
-
 let urlEventTrack = 'https://events.sdwc.me';
+let ipAddress = getRealIp();
 
 export const track = function track(event, objectId, extraObj) {
-    console.log(event);
-    console.log(objectId);
-    console.log(extraObj);
-
-    let diffSeconds = 0;
 
     if(trackFirstEventInterval) {
-
-        const diffTime = Math.abs(initTime - new Date());
-        diffSeconds = Math.ceil(diffTime / (1000)); 
         trackFirstEventInterval = false;
+        sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / (1000)));
     }
 
-    sendTrack();
+    sendTrack(pageToken, event, objectId);
 };
 
 export const init = function init(token, extraObj) {
@@ -37,20 +30,62 @@ export const init = function init(token, extraObj) {
     sendPageHitTrack(token);
 };
 
-function sendTrack(token) {
+function sendFirstClickInterval(token, seconds) {
 
+    const params = new URLSearchParams({
+        event: 'first-click-interval',
+        token: token,
+        value: seconds,
+        time: getCurTime(),
+        ip: ipAddress
+    });
+
+    let url = `${urlEventTrack}?${params.toString()}`;
+
+    console.log(url);
+}
+
+function sendTrack(token, event, objectId) {
+
+    const params = new URLSearchParams({
+        event: event,
+        token: token,
+        collection_id: objectId,
+        time: getCurTime(),
+        ip: ipAddress
+    });
+
+    let url = `${urlEventTrack}?${params.toString()}`;
+
+    console.log(url);
 }
 
 function sendPageHitTrack(token) {
 
     const params = new URLSearchParams({
         event: 'page-hit',
-        token: token
+        token: token,
+        time: getCurTime(),
+        ip: ipAddress
     });
 
     let url = `${urlEventTrack}?${params.toString()}`;
 
     console.log(url);
+}
+
+function getCurTime() {
+    return new Date().getTime();
+}
+
+function getRealIp() {
+    fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => {
+    console.log('Endereço IP público do cliente:', ipAddress);
+    return data.ip;
+  })
+  .catch(error => {
+    console.error('Erro ao obter o endereço IP público:', error);
+  });
 }
 
 
