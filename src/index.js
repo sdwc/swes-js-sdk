@@ -10,6 +10,7 @@ export const track = function track(event, objectId, extraObj) {
     console.log(extraObj);
     console.log(pageToken);
 
+    console.log(trackFirstEventInterval);
     if(trackFirstEventInterval) {
 
         const diffTime = Math.abs(initTime - new Date());
@@ -28,14 +29,18 @@ export const init = function init(token, extraObj) {
     if(extraObj != null) {
         trackPageview = extraObj.track_pageview != undefined ? extraObj.track_pageview : false;
         trackFirstEventInterval = extraObj.track_firsteventinterval != undefined ? extraObj.track_firsteventinterval : false;
+
+        console.log(trackFirstEventInterval);
     }
 
     afterInit();
 };
 
 function afterInit() {
+    console.log("afterInit");
     if(trackFirstEventInterval) {
         initTime = new Date();
+        console.log(initTime);
     }
 }
 
