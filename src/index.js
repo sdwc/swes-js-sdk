@@ -1,4 +1,7 @@
+let TrackService = import('../src/service/TrackService.js');
+
 const { v1: uuidv1 } = require('uuid');
+const axios = require('axios');
 
 let pageToken;
 let trackPageview = false;
@@ -8,6 +11,8 @@ let urlEventTrack = 'https://events.sdwc.me';
 let urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 let ipAddress = getRealIp();
 
+let trackService = new TrackService();
+
 export const track = function track(event, objectId, extraObj) {
 
     if(trackFirstEventInterval) {
@@ -15,7 +20,7 @@ export const track = function track(event, objectId, extraObj) {
         sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / (1000)));
     }
 
-    sendTrack(pageToken, event, objectId);
+    trackService.sendTrack(pageToken, event, objectId);
 };
 
 export const init = function init(token, extraObj) {
@@ -30,7 +35,7 @@ export const init = function init(token, extraObj) {
         }
     }
 
-    sendPageHitTrack(token);
+    trackService.sendPageHitTrack(token);
 };
 
 function sendFirstClickInterval(token, seconds) {
@@ -49,36 +54,6 @@ function sendFirstClickInterval(token, seconds) {
     console.log(url);
 }
 
-function sendTrack(token, event, objectId) {
-
-    const params = new URLSearchParams({
-        event: event,
-        token: token,
-        collection_id: objectId,
-        time: getCurTime(),
-        ip: ipAddress,
-        insert_id: uuidv1()
-    });
-
-    let url = `${urlEventTrack}?${params.toString()}`;
-
-    console.log(url);
-}
-
-function sendPageHitTrack(token) {
-
-    const params = new URLSearchParams({
-        event: 'page-hit',
-        token: token,
-        time: getCurTime(),
-        ip: ipAddress,
-        insert_id: uuidv1()
-    });
-
-    let url = `${urlEventTrack}?${params.toString()}`;
-
-    console.log(url);
-}
 
 function getCurTime() {
     return new Date().getTime();

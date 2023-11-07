@@ -5,19 +5,22 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var _require = require('uuid'),
     uuidv1 = _require.v1;
 
+var axios = require('axios');
+
 var pageToken;
 var trackFirstEventInterval = false;
 var initTime = false;
 var urlEventTrack = 'https://events.sdwc.me';
 var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 var ipAddress = getRealIp();
+var trackService = new TrackService();
 var track = function track(event, objectId, extraObj) {
   if (trackFirstEventInterval) {
     trackFirstEventInterval = false;
     sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / 1000));
   }
 
-  sendTrack(pageToken, event, objectId);
+  trackService.sendTrack(pageToken, event, objectId);
 };
 var init = function init(token, extraObj) {
   pageToken = token;
@@ -31,7 +34,7 @@ var init = function init(token, extraObj) {
     }
   }
 
-  sendPageHitTrack(token);
+  trackService.sendPageHitTrack(token);
 };
 
 function sendFirstClickInterval(token, seconds) {
@@ -39,31 +42,6 @@ function sendFirstClickInterval(token, seconds) {
     event: 'first-click-interval',
     token: token,
     value: seconds,
-    time: getCurTime(),
-    ip: ipAddress,
-    insert_id: uuidv1()
-  });
-  var url = "".concat(urlEventTrack, "?").concat(params.toString());
-  console.log(url);
-}
-
-function sendTrack(token, event, objectId) {
-  var params = new URLSearchParams({
-    event: event,
-    token: token,
-    collection_id: objectId,
-    time: getCurTime(),
-    ip: ipAddress,
-    insert_id: uuidv1()
-  });
-  var url = "".concat(urlEventTrack, "?").concat(params.toString());
-  console.log(url);
-}
-
-function sendPageHitTrack(token) {
-  var params = new URLSearchParams({
-    event: 'page-hit',
-    token: token,
     time: getCurTime(),
     ip: ipAddress,
     insert_id: uuidv1()
