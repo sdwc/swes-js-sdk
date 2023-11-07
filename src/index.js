@@ -1,6 +1,7 @@
-const TrackService = require('../src/service/TrackService.js');
+
 const { v1: uuidv1 } = require('uuid');
 const axios = require('axios');
+import TrackService from '../src/service/TrackService.js';
 
 let pageToken;
 let trackPageview = false;

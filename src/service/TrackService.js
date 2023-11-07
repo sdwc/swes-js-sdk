@@ -1,5 +1,5 @@
 
-class TrackService {
+export default class  TrackService {
 
     constructor() {
 
@@ -37,5 +37,3 @@ class TrackService {
     }
 
 }
-
-exports = {TrackService}
