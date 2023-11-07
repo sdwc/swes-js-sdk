@@ -27,11 +27,13 @@ var axios = require('axios');
 
 var urlEventTrack = 'https://events.sdwc.me';
 var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
-var ipAddress = getRealIp();
+var ipAddress = null;
 
 var TrackService = /*#__PURE__*/function () {
   function TrackService() {
     _classCallCheck(this, TrackService);
+
+    ipAddress = this.getRealIp();
   }
 
   _createClass(TrackService, [{
@@ -41,7 +43,7 @@ var TrackService = /*#__PURE__*/function () {
         event: 'page-hit',
         token: token,
         time: this.getCurTime(),
-        ip: this.ipAddress,
+        ip: ipAddress,
         insert_id: uuidv1()
       });
       var url = "".concat(urlEventTrack, "?").concat(params.toString());
