@@ -80,7 +80,8 @@ function getCurTime() {
 
 function getRealIp() {
     fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => {
-    console.log('Endereço IP público do cliente:', ipAddress);
+    console.log('Endereço IP público do cliente:', data.ip);
+    ipAddress = data.ip;
     return data.ip;
   })
   .catch(error => {

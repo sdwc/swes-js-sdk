@@ -75,7 +75,8 @@
     fetch('https://api.ipify.org?format=json').then(function (response) {
       return response.json();
     }).then(function (data) {
-      console.log('Endereço IP público do cliente:', ipAddress);
+      console.log('Endereço IP público do cliente:', data.ip);
+      ipAddress = data.ip;
       return data.ip;
     }).catch(function (error) {
       console.error('Erro ao obter o endereço IP público:', error);
