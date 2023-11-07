@@ -4,10 +4,14 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['swes-js-sdk'] = {}));
 }(this, (function (exports) { 'use strict';
 
+  var _require = require('uuid'),
+      uuidv1 = _require.v1;
+
   var pageToken;
   var trackFirstEventInterval = false;
   var initTime = false;
   var urlEventTrack = 'https://events.sdwc.me';
+  var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
   var ipAddress = getRealIp();
   var track = function track(event, objectId, extraObj) {
     if (trackFirstEventInterval) {
@@ -38,7 +42,8 @@
       token: token,
       value: seconds,
       time: getCurTime(),
-      ip: ipAddress
+      ip: ipAddress,
+      insert_id: uuidv1()
     });
     var url = "".concat(urlEventTrack, "?").concat(params.toString());
     console.log(url);
@@ -50,7 +55,8 @@
       token: token,
       collection_id: objectId,
       time: getCurTime(),
-      ip: ipAddress
+      ip: ipAddress,
+      insert_id: uuidv1()
     });
     var url = "".concat(urlEventTrack, "?").concat(params.toString());
     console.log(url);
@@ -61,7 +67,8 @@
       event: 'page-hit',
       token: token,
       time: getCurTime(),
-      ip: ipAddress
+      ip: ipAddress,
+      insert_id: uuidv1()
     });
     var url = "".concat(urlEventTrack, "?").concat(params.toString());
     console.log(url);
@@ -72,14 +79,13 @@
   }
 
   function getRealIp() {
-    fetch('https://api.ipify.org?format=json').then(function (response) {
+    fetch(urlRealIpAdressFind).then(function (response) {
       return response.json();
     }).then(function (data) {
-      console.log('Endereço IP público do cliente:', data.ip);
       ipAddress = data.ip;
       return data.ip;
     }).catch(function (error) {
-      console.error('Erro ao obter o endereço IP público:', error);
+      console.error(error);
     });
   }
 

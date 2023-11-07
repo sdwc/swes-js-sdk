@@ -1,8 +1,11 @@
+const { v1: uuidv1 } = require('uuid');
+
 let pageToken;
 let trackPageview = false;
 let trackFirstEventInterval = false;
 let initTime = false;
 let urlEventTrack = 'https://events.sdwc.me';
+let urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 let ipAddress = getRealIp();
 
 export const track = function track(event, objectId, extraObj) {
@@ -37,7 +40,8 @@ function sendFirstClickInterval(token, seconds) {
         token: token,
         value: seconds,
         time: getCurTime(),
-        ip: ipAddress
+        ip: ipAddress,
+        insert_id: uuidv1()
     });
 
     let url = `${urlEventTrack}?${params.toString()}`;
@@ -52,7 +56,8 @@ function sendTrack(token, event, objectId) {
         token: token,
         collection_id: objectId,
         time: getCurTime(),
-        ip: ipAddress
+        ip: ipAddress,
+        insert_id: uuidv1()
     });
 
     let url = `${urlEventTrack}?${params.toString()}`;
@@ -66,7 +71,8 @@ function sendPageHitTrack(token) {
         event: 'page-hit',
         token: token,
         time: getCurTime(),
-        ip: ipAddress
+        ip: ipAddress,
+        insert_id: uuidv1()
     });
 
     let url = `${urlEventTrack}?${params.toString()}`;
@@ -79,13 +85,12 @@ function getCurTime() {
 }
 
 function getRealIp() {
-    fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => {
-    console.log('Endereço IP público do cliente:', data.ip);
+    fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
     ipAddress = data.ip;
     return data.ip;
   })
   .catch(error => {
-    console.error('Erro ao obter o endereço IP público:', error);
+    console.error(error);
   });
 }
 
