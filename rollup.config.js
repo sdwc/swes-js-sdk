@@ -8,8 +8,8 @@ export default [
     input: "src/index.js", // your entry point
     output: {
       name: "swes-js-sdk", // package name
-      file: pkg.browser,
-      format: "umd",
+      dir: 'dist',
+      format: "es",
     },
     plugins: [
       resolve(),
@@ -21,10 +21,10 @@ export default [
   },
   {
     input: "src/index.js", // your entry point
-    output: [
-      { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "es" },
-    ],
+    output: {
+      dir: 'dist', // Diretório de saída
+      format: 'es',
+    },
     plugins: [
       babel({
         exclude: ["node_modules/**"],
