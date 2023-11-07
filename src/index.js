@@ -1,5 +1,4 @@
-let TrackService = import('../src/service/TrackService.js');
-
+const TrackService = require('../src/service/TrackService.js');
 const { v1: uuidv1 } = require('uuid');
 const axios = require('axios');
 

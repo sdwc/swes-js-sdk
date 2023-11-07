@@ -1,4 +1,4 @@
-var TrackService = import('./TrackService-a89f692b.js');
+var TrackService = require('../src/service/TrackService.js');
 
 var _require = require('uuid'),
     uuidv1 = _require.v1;
