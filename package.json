@@ -2,7 +2,7 @@
   "name": "swes-js-sdk",
   "version": "1.0.0",
   "description": "JS utilities library",
-  "main": "dist/swes-js-sdk.cjs.js",
+  "main": "dist/index.js",
   "module": "dist/swes-js-sdk.esm.js",
   "browser": "dist/agm-awesome-utils.umd.js",
   "scripts": {
