@@ -20,6 +20,15 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 
+var _require = require('uuid'),
+    uuidv1 = _require.v1;
+
+var axios = require('axios');
+
+var urlEventTrack = 'https://events.sdwc.me';
+var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
+var ipAddress = getRealIp();
+
 var TrackService = /*#__PURE__*/function () {
   function TrackService() {
     _classCallCheck(this, TrackService);
@@ -31,8 +40,8 @@ var TrackService = /*#__PURE__*/function () {
       var params = new URLSearchParams({
         event: 'page-hit',
         token: token,
-        time: getCurTime(),
-        ip: ipAddress,
+        time: this.getCurTime(),
+        ip: this.ipAddress,
         insert_id: uuidv1()
       });
       var url = "".concat(urlEventTrack, "?").concat(params.toString());
@@ -45,33 +54,57 @@ var TrackService = /*#__PURE__*/function () {
         event: event,
         token: token,
         collection_id: objectId,
-        time: getCurTime(),
+        time: this.getCurTime(),
         ip: ipAddress,
         insert_id: uuidv1()
       });
       var url = "".concat(urlEventTrack, "?").concat(params.toString());
       console.log(url);
     }
+  }, {
+    key: "getCurTime",
+    value: function getCurTime() {
+      return new Date().getTime();
+    }
+  }, {
+    key: "sendFirstClickInterval",
+    value: function sendFirstClickInterval(token, seconds) {
+      var params = new URLSearchParams({
+        event: 'first-click-interval',
+        token: token,
+        value: seconds,
+        time: this.getCurTime(),
+        ip: ipAddress,
+        insert_id: uuidv1()
+      });
+      var url = "".concat(urlEventTrack, "?").concat(params.toString());
+      console.log(url);
+    }
+  }, {
+    key: "getRealIp",
+    value: function getRealIp() {
+      fetch(urlRealIpAdressFind).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        ipAddress = data.ip;
+        return data.ip;
+      }).catch(function (error) {
+        console.error(error);
+      });
+    }
   }]);
 
   return TrackService;
 }();
 
-var _require = require('uuid'),
-    uuidv1$1 = _require.v1;
-
-var axios = require('axios');
 var pageToken;
 var trackFirstEventInterval = false;
 var initTime = false;
-var urlEventTrack$1 = 'https://events.sdwc.me';
-var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
-var ipAddress$1 = getRealIp();
 var trackService = new TrackService();
 var track = function track(event, objectId, extraObj) {
   if (trackFirstEventInterval) {
     trackFirstEventInterval = false;
-    sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / 1000));
+    trackService.sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / 1000));
   }
 
   trackService.sendTrack(pageToken, event, objectId);
@@ -90,33 +123,5 @@ var init = function init(token, extraObj) {
 
   trackService.sendPageHitTrack(token);
 };
-
-function sendFirstClickInterval(token, seconds) {
-  var params = new URLSearchParams({
-    event: 'first-click-interval',
-    token: token,
-    value: seconds,
-    time: getCurTime$1(),
-    ip: ipAddress$1,
-    insert_id: uuidv1$1()
-  });
-  var url = "".concat(urlEventTrack$1, "?").concat(params.toString());
-  console.log(url);
-}
-
-function getCurTime$1() {
-  return new Date().getTime();
-}
-
-function getRealIp() {
-  fetch(urlRealIpAdressFind).then(function (response) {
-    return response.json();
-  }).then(function (data) {
-    ipAddress$1 = data.ip;
-    return data.ip;
-  }).catch(function (error) {
-    console.error(error);
-  });
-}
 
 export { init, track };
