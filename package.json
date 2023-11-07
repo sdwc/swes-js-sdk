@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "JS utilities library",
   "main": "dist/index.js",
-  "module": "dist/swes-js-sdk.esm.js",
+  "module": "dist/index.js",
   "browser": "dist/agm-awesome-utils.umd.js",
   "scripts": {
     "build": "rollup -c",
