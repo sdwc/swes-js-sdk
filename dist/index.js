@@ -1,3 +1,39 @@
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -35,7 +71,7 @@ var TrackService = /*#__PURE__*/function () {
 
     ipAddress = this.getRealIp();
     this.urlEventTrack = urlEventTrack;
-    this.processQueue();
+    processQueue();
   }
 
   _createClass(TrackService, [{
@@ -94,45 +130,58 @@ var TrackService = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "processQueue",
-    value: function processQueue() {
-      var _this = this;
+    key: "getRealIp",
+    value: function () {
+      var _getRealIp = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return fetch(urlRealIpAdressFind).then(function (response) {
+                  return response.json();
+                }).then(function (data) {
+                  ipAddress = data.ip;
+                  return data.ip;
+                }).catch(function (error) {
+                  console.error(error);
+                });
 
-      if (requestQueue.length === 0) {
-        setTimeout(this.processQueue, 1000);
-        return;
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function getRealIp() {
+        return _getRealIp.apply(this, arguments);
       }
 
-      var config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
-
-      axios(config).then(function (response) {
-        console.log('Resposta da solicitação:', response.data);
-
-        _this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
-
-      }).catch(function (error) {
-        console.error('Erro na solicitação:', error);
-
-        _this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
-
-      });
-    }
-  }, {
-    key: "getRealIp",
-    value: function getRealIp() {
-      fetch(urlRealIpAdressFind).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        ipAddress = data.ip;
-        return data.ip;
-      }).catch(function (error) {
-        console.error(error);
-      });
-    }
+      return getRealIp;
+    }()
   }]);
 
   return TrackService;
 }();
+
+function processQueue() {
+  if (requestQueue.length === 0) {
+    setTimeout(processQueue, 1000);
+    return;
+  }
+
+  var config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+
+  axios(config).then(function (response) {
+    console.log('Resposta da solicitação:', response.data);
+    processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+  }).catch(function (error) {
+    console.error('Erro na solicitação:', error);
+    processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+  });
+}
 
 var pageToken;
 var trackFirstEventInterval = false;
