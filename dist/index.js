@@ -39,8 +39,7 @@ var TrackService = /*#__PURE__*/function () {
         event: 'page-hit',
         token: token
       });
-      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
-      this.enqueueRequestToTrackEvenUrl(url);
+      this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
     }
   }, {
     key: "sendTrack",
@@ -50,8 +49,7 @@ var TrackService = /*#__PURE__*/function () {
         token: token,
         object_id: objectId
       });
-      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
-      this.enqueueRequestToTrackEvenUrl(url);
+      this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
     }
   }, {
     key: "sendFirstClickInterval",
@@ -61,13 +59,12 @@ var TrackService = /*#__PURE__*/function () {
         token: token,
         interval: seconds
       });
-      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
-      this.enqueueRequestToTrackEvenUrl(url);
+      this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
     }
   }, {
     key: "enqueueRequestToTrackEvenUrl",
     value: function enqueueRequestToTrackEvenUrl(url) {
-      console.log(url);
+      // console.log(url);
       requestQueue.push({
         method: 'get',
         url: url

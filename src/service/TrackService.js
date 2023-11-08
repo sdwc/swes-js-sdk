@@ -16,9 +16,7 @@ export default class TrackService {
             token: token
         });
 
-        let url = `${this.urlEventTrack}?${params.toString()}`;
-
-        this.enqueueRequestToTrackEvenUrl(url);
+        this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
     }
 
     sendTrack(token, event, objectId) {
@@ -28,10 +26,8 @@ export default class TrackService {
             token: token,
             object_id: objectId
         });
-    
-        let url = `${this.urlEventTrack}?${params.toString()}`;
-    
-        this.enqueueRequestToTrackEvenUrl(url);
+        
+        this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
     }
 
     sendFirstClickInterval(token, seconds) {
@@ -42,12 +38,11 @@ export default class TrackService {
             interval: seconds
         });
     
-        let url = `${this.urlEventTrack}?${params.toString()}`;
-        this.enqueueRequestToTrackEvenUrl(url);
+        this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
     }
     
     enqueueRequestToTrackEvenUrl(url) {
-        console.log(url);
+        // console.log(url);
         requestQueue.push({ method: 'get', url: url });
     }
 }
