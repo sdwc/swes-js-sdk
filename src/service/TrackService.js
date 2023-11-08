@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { v1 as uuidv1 } from 'uuid';
-const axios = require('axios');
 
 const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 let ipAddress = null;

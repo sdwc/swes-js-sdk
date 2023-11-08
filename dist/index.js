@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { v1 } from 'uuid';
 
 function _classCallCheck(instance, Constructor) {
@@ -21,8 +22,6 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
-
-var axios = require('axios');
 
 var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 var ipAddress = null;
