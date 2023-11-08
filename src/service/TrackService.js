@@ -8,24 +8,44 @@ const requestQueue = [];
 export default class TrackService {
 
     constructor(urlEventTrack) {
-        ipAddress = this.getRealIp();
         this.urlEventTrack = urlEventTrack;
         processQueue();
     }
 
     sendPageHitTrack(token) {
 
-        const params = new URLSearchParams({
-            event: 'page-hit',
-            token: token,
-            time: this.getCurTime(),
-            ip: ipAddress,
-            insert_id: uuidv1()
-        });
-    
-        let url = `${this.urlEventTrack}?${params.toString()}`;
-    
-        this.enqueueRequestToTrackEvenUrl(url);
+        fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
+            ipAddress = data.ip;
+            
+            const params = new URLSearchParams({
+                event: 'page-hit',
+                token: token,
+                time: this.getCurTime(),
+                ip: ipAddress,
+                insert_id: uuidv1()
+            });
+        
+            let url = `${this.urlEventTrack}?${params.toString()}`;
+        
+            this.enqueueRequestToTrackEvenUrl(url);
+
+          })
+          .catch(error => {
+            console.error(error);
+
+            const params = new URLSearchParams({
+                event: 'page-hit',
+                token: token,
+                time: this.getCurTime(),
+                ip: ipAddress,
+                insert_id: uuidv1()
+            });
+        
+            let url = `${this.urlEventTrack}?${params.toString()}`;
+        
+            this.enqueueRequestToTrackEvenUrl(url);
+          });
+
     }
 
     sendTrack(token, event, objectId) {
@@ -66,16 +86,6 @@ export default class TrackService {
     enqueueRequestToTrackEvenUrl(url) {
         console.log(url);
         requestQueue.push({ method: 'get', url: url });
-    }
-
-    async getRealIp() {
-        await fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
-        ipAddress = data.ip;
-        return data.ip;
-      })
-      .catch(error => {
-        console.error(error);
-      });
     }
 }
 
