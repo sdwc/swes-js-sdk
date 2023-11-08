@@ -3,12 +3,14 @@ const axios = require('axios');
 
 const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 let ipAddress = null;
+const requestQueue = [];
 
 export default class TrackService {
 
     constructor(urlEventTrack) {
         ipAddress = this.getRealIp();
-        this.urlEventTrack = urlEventTrack
+        this.urlEventTrack = urlEventTrack;
+        this.processQueue();
     }
 
     sendPageHitTrack(token) {
@@ -23,7 +25,7 @@ export default class TrackService {
     
         let url = `${this.urlEventTrack}?${params.toString()}`;
     
-        console.log(url);
+        this.enqueueRequestToTrackEvenUrl(url);
     }
 
     sendTrack(token, event, objectId) {
@@ -39,7 +41,7 @@ export default class TrackService {
     
         let url = `${this.urlEventTrack}?${params.toString()}`;
     
-        console.log(url);
+        this.enqueueRequestToTrackEvenUrl(url);
     }
 
     getCurTime() {
@@ -58,8 +60,31 @@ export default class TrackService {
         });
     
         let url = `${this.urlEventTrack}?${params.toString()}`;
+        this.enqueueRequestToTrackEvenUrl(url);
+    }
     
+    enqueueRequestToTrackEvenUrl(url) {
         console.log(url);
+        requestQueue.push({ method: 'get', url: url });
+    }
+
+    processQueue() {
+        if (requestQueue.length === 0) {
+            setTimeout(this.processQueue, 1000);
+            return;
+        }
+    
+        const config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+        
+        axios(config)
+        .then(response => {
+            console.log('Resposta da solicitação:', response.data);
+            this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+        })
+        .catch(error => {
+            console.error('Erro na solicitação:', error);
+            this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+        });
     }
 
     getRealIp() {
