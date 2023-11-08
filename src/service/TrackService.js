@@ -73,7 +73,7 @@ export default class TrackService {
         const params = new URLSearchParams({
             event: 'first-click-interval',
             token: token,
-            value: seconds,
+            interval: seconds,
             time: this.getCurTime(),
             ip: ipAddress,
             insert_id: uuidv1()

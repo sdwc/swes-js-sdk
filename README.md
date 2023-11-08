@@ -46,7 +46,7 @@ Implements a Javascript lib that could capture and transmits realtime events fro
 
 ```
 - https://events.sdwc.me?event=page-hit&token=sdwc-c76343df3&insert_id=343fd3334534f5332234f33
-- https://events.sdwc.me?event=first-click-interval&token=sdwc-c76343df3&insert_id=89fdj393j39384f3&value=50
+- https://events.sdwc.me?event=first-click-interval&token=sdwc-c76343df3&insert_id=89fdj393j39384f3&interval=50
 ```
 
 ### With GeoLocation:
