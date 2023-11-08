@@ -1,3 +1,5 @@
+import { v1 } from 'uuid';
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -19,9 +21,6 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
-
-var _require = require('uuid'),
-    uuidv1 = _require.v1;
 
 var axios = require('axios');
 
@@ -51,7 +50,7 @@ var TrackService = /*#__PURE__*/function () {
           token: token,
           time: _this.getCurTime(),
           ip: ipAddress,
-          insert_id: uuidv1()
+          insert_id: v1()
         });
         var url = "".concat(_this.urlEventTrack, "?").concat(params.toString());
 
@@ -63,7 +62,7 @@ var TrackService = /*#__PURE__*/function () {
           token: token,
           time: _this.getCurTime(),
           ip: ipAddress,
-          insert_id: uuidv1()
+          insert_id: v1()
         });
         var url = "".concat(_this.urlEventTrack, "?").concat(params.toString());
 
@@ -79,7 +78,7 @@ var TrackService = /*#__PURE__*/function () {
         collection_id: objectId,
         time: this.getCurTime(),
         ip: ipAddress,
-        insert_id: uuidv1()
+        insert_id: v1()
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       this.enqueueRequestToTrackEvenUrl(url);
@@ -98,7 +97,7 @@ var TrackService = /*#__PURE__*/function () {
         value: seconds,
         time: this.getCurTime(),
         ip: ipAddress,
-        insert_id: uuidv1()
+        insert_id: v1()
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       this.enqueueRequestToTrackEvenUrl(url);
@@ -123,14 +122,14 @@ function processQueue() {
     return;
   }
 
-  var config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+  var config = requestQueue.shift(); // get the next
 
   axios(config).then(function (response) {
     console.log('Resposta da solicitação:', response.data);
-    processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+    processQueue();
   }).catch(function (error) {
     console.error('Erro na solicitação:', error);
-    processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+    processQueue();
   });
 }
 
