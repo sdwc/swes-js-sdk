@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { v1 } from 'uuid';
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -23,8 +22,6 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 
-var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
-var ipAddress = null;
 var requestQueue = [];
 
 var TrackService = /*#__PURE__*/function () {
@@ -38,35 +35,12 @@ var TrackService = /*#__PURE__*/function () {
   _createClass(TrackService, [{
     key: "sendPageHitTrack",
     value: function sendPageHitTrack(token) {
-      var _this = this;
-
-      fetch(urlRealIpAdressFind).then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        ipAddress = data.ip;
-        var params = new URLSearchParams({
-          event: 'page-hit',
-          token: token,
-          time: _this.getCurTime(),
-          ip: ipAddress,
-          insert_id: v1()
-        });
-        var url = "".concat(_this.urlEventTrack, "?").concat(params.toString());
-
-        _this.enqueueRequestToTrackEvenUrl(url);
-      }).catch(function (error) {
-        console.error(error);
-        var params = new URLSearchParams({
-          event: 'page-hit',
-          token: token,
-          time: _this.getCurTime(),
-          ip: ipAddress,
-          insert_id: v1()
-        });
-        var url = "".concat(_this.urlEventTrack, "?").concat(params.toString());
-
-        _this.enqueueRequestToTrackEvenUrl(url);
+      var params = new URLSearchParams({
+        event: 'page-hit',
+        token: token
       });
+      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
+      this.enqueueRequestToTrackEvenUrl(url);
     }
   }, {
     key: "sendTrack",
@@ -74,18 +48,10 @@ var TrackService = /*#__PURE__*/function () {
       var params = new URLSearchParams({
         event: event,
         token: token,
-        collection_id: objectId,
-        time: this.getCurTime(),
-        ip: ipAddress,
-        insert_id: v1()
+        object_id: objectId
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       this.enqueueRequestToTrackEvenUrl(url);
-    }
-  }, {
-    key: "getCurTime",
-    value: function getCurTime() {
-      return new Date().getTime();
     }
   }, {
     key: "sendFirstClickInterval",
@@ -93,10 +59,7 @@ var TrackService = /*#__PURE__*/function () {
       var params = new URLSearchParams({
         event: 'first-click-interval',
         token: token,
-        value: seconds,
-        time: this.getCurTime(),
-        ip: ipAddress,
-        insert_id: v1()
+        interval: seconds
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       this.enqueueRequestToTrackEvenUrl(url);

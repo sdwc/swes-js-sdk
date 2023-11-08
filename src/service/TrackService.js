@@ -1,8 +1,5 @@
 import axios from 'axios';
-import { v1 as uuidv1 } from 'uuid';
 
-const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
-let ipAddress = null;
 const requestQueue = [];
 
 export default class TrackService {
@@ -14,38 +11,14 @@ export default class TrackService {
 
     sendPageHitTrack(token) {
 
-        fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
-            ipAddress = data.ip;
-            
-            const params = new URLSearchParams({
-                event: 'page-hit',
-                token: token,
-                time: this.getCurTime(),
-                ip: ipAddress,
-                insert_id: uuidv1()
-            });
-        
-            let url = `${this.urlEventTrack}?${params.toString()}`;
-        
-            this.enqueueRequestToTrackEvenUrl(url);
+        const params = new URLSearchParams({
+            event: 'page-hit',
+            token: token
+        });
 
-          })
-          .catch(error => {
-            console.error(error);
+        let url = `${this.urlEventTrack}?${params.toString()}`;
 
-            const params = new URLSearchParams({
-                event: 'page-hit',
-                token: token,
-                time: this.getCurTime(),
-                ip: ipAddress,
-                insert_id: uuidv1()
-            });
-        
-            let url = `${this.urlEventTrack}?${params.toString()}`;
-        
-            this.enqueueRequestToTrackEvenUrl(url);
-          });
-
+        this.enqueueRequestToTrackEvenUrl(url);
     }
 
     sendTrack(token, event, objectId) {
@@ -53,10 +26,7 @@ export default class TrackService {
         const params = new URLSearchParams({
             event: event,
             token: token,
-            collection_id: objectId,
-            time: this.getCurTime(),
-            ip: ipAddress,
-            insert_id: uuidv1()
+            object_id: objectId
         });
     
         let url = `${this.urlEventTrack}?${params.toString()}`;
@@ -64,19 +34,12 @@ export default class TrackService {
         this.enqueueRequestToTrackEvenUrl(url);
     }
 
-    getCurTime() {
-        return new Date().getTime();
-    }
-
     sendFirstClickInterval(token, seconds) {
 
         const params = new URLSearchParams({
             event: 'first-click-interval',
             token: token,
-            interval: seconds,
-            time: this.getCurTime(),
-            ip: ipAddress,
-            insert_id: uuidv1()
+            interval: seconds
         });
     
         let url = `${this.urlEventTrack}?${params.toString()}`;
