@@ -1,4 +1,4 @@
-const { v1: uuidv1 } = require('uuid');
+import { v1 as uuidv1 } from 'uuid';
 const axios = require('axios');
 
 const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
