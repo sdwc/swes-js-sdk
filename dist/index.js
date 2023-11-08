@@ -27,6 +27,7 @@ var axios = require('axios');
 
 var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 var ipAddress = null;
+var requestQueue = [];
 
 var TrackService = /*#__PURE__*/function () {
   function TrackService(urlEventTrack) {
@@ -34,6 +35,7 @@ var TrackService = /*#__PURE__*/function () {
 
     ipAddress = this.getRealIp();
     this.urlEventTrack = urlEventTrack;
+    this.processQueue();
   }
 
   _createClass(TrackService, [{
@@ -47,7 +49,7 @@ var TrackService = /*#__PURE__*/function () {
         insert_id: uuidv1()
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
-      console.log(url);
+      this.enqueueRequestToTrackEvenUrl(url);
     }
   }, {
     key: "sendTrack",
@@ -61,7 +63,7 @@ var TrackService = /*#__PURE__*/function () {
         insert_id: uuidv1()
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
-      console.log(url);
+      this.enqueueRequestToTrackEvenUrl(url);
     }
   }, {
     key: "getCurTime",
@@ -80,7 +82,40 @@ var TrackService = /*#__PURE__*/function () {
         insert_id: uuidv1()
       });
       var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
+      this.enqueueRequestToTrackEvenUrl(url);
+    }
+  }, {
+    key: "enqueueRequestToTrackEvenUrl",
+    value: function enqueueRequestToTrackEvenUrl(url) {
       console.log(url);
+      requestQueue.push({
+        method: 'get',
+        url: url
+      });
+    }
+  }, {
+    key: "processQueue",
+    value: function processQueue() {
+      var _this = this;
+
+      if (requestQueue.length === 0) {
+        setTimeout(this.processQueue, 1000);
+        return;
+      }
+
+      var config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+
+      axios(config).then(function (response) {
+        console.log('Resposta da solicitação:', response.data);
+
+        _this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+
+      }).catch(function (error) {
+        console.error('Erro na solicitação:', error);
+
+        _this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+
+      });
     }
   }, {
     key: "getRealIp",
