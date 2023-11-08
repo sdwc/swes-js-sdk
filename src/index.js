@@ -5,7 +5,7 @@ let trackPageview = false;
 let trackFirstEventInterval = false;
 let initTime = false;
 
-let trackService = new TrackService();
+let trackService = null;
 
 export const track = function track(event, objectId, extraObj) {
 
@@ -17,7 +17,8 @@ export const track = function track(event, objectId, extraObj) {
     trackService.sendTrack(pageToken, event, objectId);
 };
 
-export const init = function init(token, extraObj) {
+export const init = function init(token, extraObj, urlEventTrack) {
+    trackService = new TrackService(urlEventTrack);
     pageToken = token;
 
     if(extraObj != null) {
@@ -31,6 +32,3 @@ export const init = function init(token, extraObj) {
 
     trackService.sendPageHitTrack(token);
 };
-
-
-

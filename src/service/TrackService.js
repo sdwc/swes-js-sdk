@@ -1,14 +1,14 @@
 const { v1: uuidv1 } = require('uuid');
 const axios = require('axios');
 
-const urlEventTrack = 'https://events.sdwc.me';
 const urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 let ipAddress = null;
 
 export default class TrackService {
 
-    constructor() {
+    constructor(urlEventTrack) {
         ipAddress = this.getRealIp();
+        this.urlEventTrack = urlEventTrack
     }
 
     sendPageHitTrack(token) {
@@ -21,7 +21,7 @@ export default class TrackService {
             insert_id: uuidv1()
         });
     
-        let url = `${urlEventTrack}?${params.toString()}`;
+        let url = `${this.urlEventTrack}?${params.toString()}`;
     
         console.log(url);
     }
@@ -37,7 +37,7 @@ export default class TrackService {
             insert_id: uuidv1()
         });
     
-        let url = `${urlEventTrack}?${params.toString()}`;
+        let url = `${this.urlEventTrack}?${params.toString()}`;
     
         console.log(url);
     }
@@ -57,7 +57,7 @@ export default class TrackService {
             insert_id: uuidv1()
         });
     
-        let url = `${urlEventTrack}?${params.toString()}`;
+        let url = `${this.urlEventTrack}?${params.toString()}`;
     
         console.log(url);
     }

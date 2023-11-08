@@ -25,15 +25,15 @@ var _require = require('uuid'),
 
 var axios = require('axios');
 
-var urlEventTrack = 'https://events.sdwc.me';
 var urlRealIpAdressFind = 'https://api.ipify.org?format=json';
 var ipAddress = null;
 
 var TrackService = /*#__PURE__*/function () {
-  function TrackService() {
+  function TrackService(urlEventTrack) {
     _classCallCheck(this, TrackService);
 
     ipAddress = this.getRealIp();
+    this.urlEventTrack = urlEventTrack;
   }
 
   _createClass(TrackService, [{
@@ -46,7 +46,7 @@ var TrackService = /*#__PURE__*/function () {
         ip: ipAddress,
         insert_id: uuidv1()
       });
-      var url = "".concat(urlEventTrack, "?").concat(params.toString());
+      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       console.log(url);
     }
   }, {
@@ -60,7 +60,7 @@ var TrackService = /*#__PURE__*/function () {
         ip: ipAddress,
         insert_id: uuidv1()
       });
-      var url = "".concat(urlEventTrack, "?").concat(params.toString());
+      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       console.log(url);
     }
   }, {
@@ -79,7 +79,7 @@ var TrackService = /*#__PURE__*/function () {
         ip: ipAddress,
         insert_id: uuidv1()
       });
-      var url = "".concat(urlEventTrack, "?").concat(params.toString());
+      var url = "".concat(this.urlEventTrack, "?").concat(params.toString());
       console.log(url);
     }
   }, {
@@ -102,7 +102,7 @@ var TrackService = /*#__PURE__*/function () {
 var pageToken;
 var trackFirstEventInterval = false;
 var initTime = false;
-var trackService = new TrackService();
+var trackService = null;
 var track = function track(event, objectId, extraObj) {
   if (trackFirstEventInterval) {
     trackFirstEventInterval = false;
@@ -111,7 +111,8 @@ var track = function track(event, objectId, extraObj) {
 
   trackService.sendTrack(pageToken, event, objectId);
 };
-var init = function init(token, extraObj) {
+var init = function init(token, extraObj, urlEventTrack) {
+  trackService = new TrackService(urlEventTrack);
   pageToken = token;
 
   if (extraObj != null) {
