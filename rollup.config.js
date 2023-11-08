@@ -5,9 +5,9 @@ import pkg from "./package.json";
 
 export default [
   {
-    input: "src/index.js", // your entry point
+    input: "src/index.js",
     output: {
-      name: "swes-js-sdk", // package name
+      name: "swes-js-sdk",
       dir: 'dist',
       format: "es",
     },
@@ -20,9 +20,9 @@ export default [
     ],
   },
   {
-    input: "src/index.js", // your entry point
+    input: "src/index.js",
     output: {
-      dir: 'dist', // Diretório de saída
+      dir: 'dist',
       format: 'es',
     },
     plugins: [
