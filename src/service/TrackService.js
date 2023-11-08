@@ -95,15 +95,15 @@ function processQueue() {
         return;
     }
 
-    const config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+    const config = requestQueue.shift(); // get the next
     
     axios(config)
     .then(response => {
         console.log('Resposta da solicitação:', response.data);
-        processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+        processQueue();
     })
     .catch(error => {
         console.error('Erro na solicitação:', error);
-        processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+        processQueue();
     });
 }
