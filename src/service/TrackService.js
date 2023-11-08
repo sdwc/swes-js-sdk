@@ -10,7 +10,7 @@ export default class TrackService {
     constructor(urlEventTrack) {
         ipAddress = this.getRealIp();
         this.urlEventTrack = urlEventTrack;
-        this.processQueue();
+        processQueue();
     }
 
     sendPageHitTrack(token) {
@@ -68,27 +68,8 @@ export default class TrackService {
         requestQueue.push({ method: 'get', url: url });
     }
 
-    processQueue() {
-        if (requestQueue.length === 0) {
-            setTimeout(this.processQueue, 1000);
-            return;
-        }
-    
-        const config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
-        
-        axios(config)
-        .then(response => {
-            console.log('Resposta da solicitação:', response.data);
-            this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
-        })
-        .catch(error => {
-            console.error('Erro na solicitação:', error);
-            this.processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
-        });
-    }
-
-    getRealIp() {
-        fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
+    async getRealIp() {
+        await fetch(urlRealIpAdressFind).then(response => response.json()).then(data => {
         ipAddress = data.ip;
         return data.ip;
       })
@@ -96,5 +77,23 @@ export default class TrackService {
         console.error(error);
       });
     }
+}
 
+function processQueue() {
+    if (requestQueue.length === 0) {
+        setTimeout(processQueue, 1000);
+        return;
+    }
+
+    const config = requestQueue.shift(); // Obtenha a próxima solicitação da fila.
+    
+    axios(config)
+    .then(response => {
+        console.log('Resposta da solicitação:', response.data);
+        processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+    })
+    .catch(error => {
+        console.error('Erro na solicitação:', error);
+        processQueue(); // Chame recursivamente para processar a próxima solicitação na fila.
+    });
 }
