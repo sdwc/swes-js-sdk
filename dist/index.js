@@ -24,6 +24,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 var requestQueue = [];
 var pathGeo = '/geo';
+var cacheGeo = null;
 
 var TrackService = /*#__PURE__*/function () {
   function TrackService(urlEventTrack) {
@@ -46,9 +47,7 @@ var TrackService = /*#__PURE__*/function () {
         method: 'get',
         url: "".concat(this.urlEventTrack).concat(pathGeo)
       }).then(function (response) {
-        console.log('Resposta da solicitação:', response.data);
-        console.log(response.data.countryCode);
-        console.log(response.data.city);
+        cacheGeo = response.data;
 
         _this.enqueueRequestToTrackEvenUrl("".concat(_this.urlEventTrack, "?").concat(params.toString()));
       }).catch(function (error) {
@@ -80,6 +79,14 @@ var TrackService = /*#__PURE__*/function () {
   }, {
     key: "enqueueRequestToTrackEvenUrl",
     value: function enqueueRequestToTrackEvenUrl(url) {
+      if (cacheGeo != null) {
+        var params = new URLSearchParams({
+          country: cacheGeo.countryCode,
+          city: cacheGeo.city
+        });
+        url = "".concat(url, "&").concat(params.toString());
+      }
+
       requestQueue.push({
         method: 'get',
         url: url

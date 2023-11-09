@@ -3,7 +3,7 @@ import axios from 'axios';
 const requestQueue = [];
 
 const pathGeo = '/geo';
-let cacheGeo;
+let cacheGeo = null;
 
 export default class TrackService {
 
@@ -21,11 +21,8 @@ export default class TrackService {
 
         axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
         .then(response => {
-            console.log('Resposta da solicitação:', response.data);
 
-            console.log(response.data.countryCode);
-            console.log(response.data.city);
-
+            cacheGeo = response.data;
             this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
         })
         .catch(error => {
@@ -57,6 +54,17 @@ export default class TrackService {
     }
     
     enqueueRequestToTrackEvenUrl(url) {
+
+        if(cacheGeo != null ) {
+
+            const params = new URLSearchParams({
+                country: cacheGeo.countryCode,
+                city: cacheGeo.city
+            });
+
+            url = `${url}&${params.toString()}`;
+        }
+
         requestQueue.push({ method: 'get', url: url });
     }
 }
