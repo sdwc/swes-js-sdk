@@ -23,6 +23,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 var requestQueue = [];
+var pathGeo = '/geo';
 
 var TrackService = /*#__PURE__*/function () {
   function TrackService(urlEventTrack) {
@@ -35,11 +36,26 @@ var TrackService = /*#__PURE__*/function () {
   _createClass(TrackService, [{
     key: "sendPageHitTrack",
     value: function sendPageHitTrack(token) {
+      var _this = this;
+
       var params = new URLSearchParams({
         event: 'page-hit',
         token: token
       });
-      this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
+      axios({
+        method: 'get',
+        url: "".concat(this.urlEventTrack).concat(pathGeo)
+      }).then(function (response) {
+        console.log('Resposta da solicitação:', response.data);
+        console.log(response.data.countryCode);
+        console.log(response.data.city);
+
+        _this.enqueueRequestToTrackEvenUrl("".concat(_this.urlEventTrack, "?").concat(params.toString()));
+      }).catch(function (error) {
+        console.error('err to get geo:', error);
+
+        _this.enqueueRequestToTrackEvenUrl("".concat(_this.urlEventTrack, "?").concat(params.toString()));
+      });
     }
   }, {
     key: "sendTrack",
@@ -64,7 +80,6 @@ var TrackService = /*#__PURE__*/function () {
   }, {
     key: "enqueueRequestToTrackEvenUrl",
     value: function enqueueRequestToTrackEvenUrl(url) {
-      // console.log(url);
       requestQueue.push({
         method: 'get',
         url: url
@@ -84,10 +99,9 @@ function processQueue() {
   var config = requestQueue.shift(); // get the next
 
   axios(config).then(function (response) {
-    console.log('Resposta da solicitação:', response.data);
     processQueue();
   }).catch(function (error) {
-    console.error('Erro na solicitação:', error);
+    console.error('err to call url:', error);
     processQueue();
   });
 }

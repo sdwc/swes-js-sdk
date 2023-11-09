@@ -2,6 +2,9 @@ import axios from 'axios';
 
 const requestQueue = [];
 
+const pathGeo = '/geo';
+let cacheGeo;
+
 export default class TrackService {
 
     constructor(urlEventTrack) {
@@ -16,7 +19,19 @@ export default class TrackService {
             token: token
         });
 
-        this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
+        axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
+        .then(response => {
+            console.log('Resposta da solicitação:', response.data);
+
+            console.log(response.data.countryCode);
+            console.log(response.data.city);
+
+            this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
+        })
+        .catch(error => {
+            console.error('err to get geo:', error);
+            this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
+        });
     }
 
     sendTrack(token, event, objectId) {
@@ -42,7 +57,6 @@ export default class TrackService {
     }
     
     enqueueRequestToTrackEvenUrl(url) {
-        // console.log(url);
         requestQueue.push({ method: 'get', url: url });
     }
 }
@@ -57,11 +71,10 @@ function processQueue() {
     
     axios(config)
     .then(response => {
-        console.log('Resposta da solicitação:', response.data);
         processQueue();
     })
     .catch(error => {
-        console.error('Erro na solicitação:', error);
+        console.error('err to call url:', error);
         processQueue();
     });
 }
