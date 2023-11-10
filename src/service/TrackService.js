@@ -15,7 +15,8 @@ export default class TrackService {
     sendPageHitTrack(token) {
 
         const params = new URLSearchParams({
-            event: 'page-hit',
+            event: 'hit',
+            object_type: 'page',
             token: token
         });
 
@@ -31,11 +32,12 @@ export default class TrackService {
         });
     }
 
-    sendTrack(token, event, objectId) {
+    sendTrack(token, event, objectType, objectId) {
 
         const params = new URLSearchParams({
             event: event,
             token: token,
+            object_type: objectType,
             object_id: objectId
         });
         
@@ -45,8 +47,9 @@ export default class TrackService {
     sendFirstClickInterval(token, seconds) {
 
         const params = new URLSearchParams({
-            event: 'first-click-interval',
+            event: 'hit',
             token: token,
+            object_type: 'first-click-interval',
             interval: seconds
         });
     

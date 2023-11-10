@@ -40,7 +40,8 @@ var TrackService = /*#__PURE__*/function () {
       var _this = this;
 
       var params = new URLSearchParams({
-        event: 'page-hit',
+        event: 'hit',
+        object_type: 'page',
         token: token
       });
       axios({
@@ -58,10 +59,11 @@ var TrackService = /*#__PURE__*/function () {
     }
   }, {
     key: "sendTrack",
-    value: function sendTrack(token, event, objectId) {
+    value: function sendTrack(token, event, objectType, objectId) {
       var params = new URLSearchParams({
         event: event,
         token: token,
+        object_type: objectType,
         object_id: objectId
       });
       this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
@@ -70,8 +72,9 @@ var TrackService = /*#__PURE__*/function () {
     key: "sendFirstClickInterval",
     value: function sendFirstClickInterval(token, seconds) {
       var params = new URLSearchParams({
-        event: 'first-click-interval',
+        event: 'hit',
         token: token,
+        object_type: 'first-click-interval',
         interval: seconds
       });
       this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
@@ -117,13 +120,13 @@ var pageToken;
 var trackFirstEventInterval = false;
 var initTime = false;
 var trackService = null;
-var track = function track(event, objectId, extraObj) {
+var track = function track(event, objectType, objectId, extraObj) {
   if (trackFirstEventInterval) {
     trackFirstEventInterval = false;
     trackService.sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / 1000));
   }
 
-  trackService.sendTrack(pageToken, event, objectId);
+  trackService.sendTrack(pageToken, event, objectType, objectId);
 };
 var init = function init(token, extraObj, urlEventTrack) {
   trackService = new TrackService(urlEventTrack);

@@ -32,14 +32,20 @@ Implements a Javascript lib that could capture and transmits realtime events fro
 ### NATIVE EVENT TYPES:
 
 * page-view
-* first-track-interval
+* first-track-interva
 
-### SUGESTED EVENT NAMES
+### EVENT NAMES
 
-* collection-item-click
-* link-click
-* show-case-click
-* social-click
+* hit
+* click
+* cupom-copy
+* first-click-interval
+
+### OBJECT TYPE NAMES
+
+* page
+* collection
+* collection-item
 
 
 ## REQUEST FORMAT EXAMPLES:

@@ -7,14 +7,14 @@ let initTime = false;
 
 let trackService = null;
 
-export const track = function track(event, objectId, extraObj) {
+export const track = function track(event, objectType, objectId, extraObj) {
 
     if(trackFirstEventInterval) {
         trackFirstEventInterval = false;
         trackService.sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / (1000)));
     }
 
-    trackService.sendTrack(pageToken, event, objectId);
+    trackService.sendTrack(pageToken, event, objectType, objectId);
 };
 
 export const init = function init(token, extraObj, urlEventTrack) {
