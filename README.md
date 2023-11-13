@@ -46,6 +46,8 @@ Implements a Javascript lib that could capture and transmits realtime events fro
 * page
 * collection
 * collection-item
+* social
+* link
 
 
 ## REQUEST FORMAT EXAMPLES:
