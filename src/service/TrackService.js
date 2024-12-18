@@ -14,10 +14,18 @@ export default class TrackService {
 
     sendPageHitTrack(token) {
 
+        let referrer = null;
+        try {
+            referrer = new URL(window.frames.top.document.referrer).hostname;
+        } catch (error) {
+            console.error('err to get referrer:', error);
+        }
+        
         const params = new URLSearchParams({
             event: 'hit',
             object_type: 'page',
-            token: token
+            token: token,
+            referrer: referrer
         });
 
         axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
