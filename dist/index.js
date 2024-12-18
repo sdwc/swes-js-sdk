@@ -39,10 +39,29 @@ var TrackService = /*#__PURE__*/function () {
     value: function sendPageHitTrack(token) {
       var _this = this;
 
+      var referrer = null;
+
+      try {
+        if (window.frames.top.document.referrer) {
+          referrer = new URL(window.frames.top.document.referrer).hostname;
+
+          if (referrer) {
+            var referrerParts = referrer.split('.');
+
+            if (referrerParts.length > 2) {
+              referrer = referrerParts[referrerParts.length - 2] + '.' + referrerParts[referrerParts.length - 1];
+            }
+          }
+        }
+      } catch (error) {
+        console.error('err to get referrer:', error);
+      }
+
       var params = new URLSearchParams({
         event: 'hit',
         object_type: 'page',
-        token: token
+        token: token,
+        referrer: referrer
       });
       axios({
         method: 'get',

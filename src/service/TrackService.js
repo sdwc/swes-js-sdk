@@ -14,10 +14,29 @@ export default class TrackService {
 
     sendPageHitTrack(token) {
 
+        let referrer = null;
+
+        try {
+            if(window.frames.top.document.referrer) {
+                referrer = new URL(window.frames.top.document.referrer).hostname;
+    
+                if(referrer) {
+                    const referrerParts = referrer.split('.');
+                    if(referrerParts.length > 2) {
+                        referrer = referrerParts[referrerParts.length - 2] + '.' + referrerParts[referrerParts.length - 1];
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.error('err to get referrer:', error);
+        }
+        
         const params = new URLSearchParams({
             event: 'hit',
             object_type: 'page',
-            token: token
+            token: token,
+            referrer: referrer
         });
 
         axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
