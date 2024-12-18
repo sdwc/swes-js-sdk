@@ -25,7 +25,7 @@ export default class TrackService {
             event: 'hit',
             object_type: 'page',
             token: token,
-            referrer: referrer
+            referrer: referrer ? referrer : 'empty'
         });
 
         axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
