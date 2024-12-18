@@ -42,7 +42,17 @@ var TrackService = /*#__PURE__*/function () {
       var referrer = null;
 
       try {
-        referrer = new URL(window.frames.top.document.referrer).hostname;
+        if (window.frames.top.document.referrer) {
+          referrer = new URL(window.frames.top.document.referrer).hostname;
+
+          if (referrer) {
+            var referrerParts = referrer.split('.');
+
+            if (referrerParts.length > 2) {
+              referrer = referrerParts[referrerParts.length - 2] + '.' + referrerParts[referrerParts.length - 1];
+            }
+          }
+        }
       } catch (error) {
         console.error('err to get referrer:', error);
       }
@@ -51,7 +61,7 @@ var TrackService = /*#__PURE__*/function () {
         event: 'hit',
         object_type: 'page',
         token: token,
-        referrer: referrer ? referrer : 'empty'
+        referrer: referrer
       });
       axios({
         method: 'get',
