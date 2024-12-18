@@ -39,10 +39,19 @@ var TrackService = /*#__PURE__*/function () {
     value: function sendPageHitTrack(token) {
       var _this = this;
 
+      var referrer = null;
+
+      try {
+        referrer = new URL(window.frames.top.document.referrer).hostname;
+      } catch (error) {
+        console.error('err to get referrer:', error);
+      }
+
       var params = new URLSearchParams({
         event: 'hit',
         object_type: 'page',
-        token: token
+        token: token,
+        referrer: referrer ? referrer : 'empty'
       });
       axios({
         method: 'get',
