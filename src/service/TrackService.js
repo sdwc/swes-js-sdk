@@ -15,8 +15,19 @@ export default class TrackService {
     sendPageHitTrack(token) {
 
         let referrer = null;
+
         try {
-            referrer = new URL(window.frames.top.document.referrer).hostname;
+            if(window.frames.top.document.referrer) {
+                referrer = new URL(window.frames.top.document.referrer).hostname;
+    
+                if(referrer) {
+                    const referrerParts = referrer.split('.');
+                    if(referrerParts.length > 2) {
+                        referrer = referrerParts[referrerParts.length - 2] + '.' + referrerParts[referrerParts.length - 1];
+                    }
+                }
+            }
+
         } catch (error) {
             console.error('err to get referrer:', error);
         }
@@ -25,7 +36,7 @@ export default class TrackService {
             event: 'hit',
             object_type: 'page',
             token: token,
-            referrer: referrer ? referrer : 'empty'
+            referrer: referrer
         });
 
         axios({ method: 'get', url: `${this.urlEventTrack}${pathGeo}` })
