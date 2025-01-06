@@ -61,7 +61,7 @@ var TrackService = /*#__PURE__*/function () {
         event: 'hit',
         object_type: 'page',
         token: token,
-        referrer: referrer
+        referrer: referrer ? referrer : 'direct'
       });
       axios({
         method: 'get',
