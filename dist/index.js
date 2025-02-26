@@ -90,7 +90,8 @@ var TrackService = /*#__PURE__*/function () {
       if (extraParams) {
         for (var key in extraParams) {
           if (extraParams.hasOwnProperty(key)) {
-            params.append(key, extraParams[key]);
+            var keyNormalized = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+            params.append(keyNormalized, extraParams[key]);
           }
         }
       }

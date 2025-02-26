@@ -65,7 +65,10 @@ export default class TrackService {
         if(extraParams) {
             for (const key in extraParams) {
                 if (extraParams.hasOwnProperty(key)) {
-                    params.append(key, extraParams[key]);
+
+                    const keyNormalized = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+
+                    params.append(keyNormalized, extraParams[key]);
                 }
             }
         }
