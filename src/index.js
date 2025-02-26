@@ -14,7 +14,7 @@ export const track = function track(event, objectType, objectId, extraObj) {
         trackService.sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / (1000)));
     }
 
-    trackService.sendTrack(pageToken, event, objectType, objectId);
+    trackService.sendTrack(pageToken, event, objectType, objectId, extraObj);
 };
 
 export const init = function init(token, extraObj, urlEventTrack) {

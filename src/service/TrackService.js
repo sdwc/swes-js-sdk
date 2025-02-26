@@ -51,7 +51,7 @@ export default class TrackService {
         });
     }
 
-    sendTrack(token, event, objectType, objectId) {
+    sendTrack(token, event, objectType, objectId, extraParams) {
 
         const params = new URLSearchParams({
             event: event,
@@ -59,6 +59,16 @@ export default class TrackService {
             object_type: objectType,
             object_id: objectId
         });
+
+        console.log(extraParams);
+
+        if(extraParams) {
+            for (const key in extraParams) {
+                if (extraParams.hasOwnProperty(key)) {
+                    params.append(key, extraParams[key]);
+                }
+            }
+        }
         
         this.enqueueRequestToTrackEvenUrl(`${this.urlEventTrack}?${params.toString()}`);
     }
