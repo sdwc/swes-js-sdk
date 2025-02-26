@@ -60,8 +60,6 @@ export default class TrackService {
             object_id: objectId
         });
 
-        console.log(extraParams);
-
         if(extraParams) {
             for (const key in extraParams) {
                 if (extraParams.hasOwnProperty(key)) {

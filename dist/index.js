@@ -85,7 +85,6 @@ var TrackService = /*#__PURE__*/function () {
         object_type: objectType,
         object_id: objectId
       });
-      console.log(extraParams);
 
       if (extraParams) {
         for (var key in extraParams) {
