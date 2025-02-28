@@ -78,13 +78,23 @@ var TrackService = /*#__PURE__*/function () {
     }
   }, {
     key: "sendTrack",
-    value: function sendTrack(token, event, objectType, objectId) {
+    value: function sendTrack(token, event, objectType, objectId, extraParams) {
       var params = new URLSearchParams({
         event: event,
         token: token,
         object_type: objectType,
         object_id: objectId
       });
+
+      if (extraParams) {
+        for (var key in extraParams) {
+          if (extraParams.hasOwnProperty(key)) {
+            var keyNormalized = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+            params.append(keyNormalized, extraParams[key]);
+          }
+        }
+      }
+
       this.enqueueRequestToTrackEvenUrl("".concat(this.urlEventTrack, "?").concat(params.toString()));
     }
   }, {
@@ -145,7 +155,7 @@ var track = function track(event, objectType, objectId, extraObj) {
     trackService.sendFirstClickInterval(pageToken, Math.ceil(Math.abs(initTime - new Date()) / 1000));
   }
 
-  trackService.sendTrack(pageToken, event, objectType, objectId);
+  trackService.sendTrack(pageToken, event, objectType, objectId, extraObj);
 };
 var init = function init(token, extraObj, urlEventTrack) {
   trackService = new TrackService(urlEventTrack);
